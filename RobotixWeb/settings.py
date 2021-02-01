@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'roboPortal',
     'workshops',
     'roboexpo',
+    'certificate',
 
     #frameworks
     'import_export',
