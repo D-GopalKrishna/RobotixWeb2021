@@ -1,11 +1,18 @@
-from PIL import Image,ImageFont,ImageDraw
-import sys
- 
-in_file, out_file, text = sys.argv[1:]
+from PIL import Image, ImageDraw, ImageFont
+import pandas as pd
+import os
 
-
-img = Image.open(in_file)
-draw = ImageDraw.Draw(img)
-font = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 20)
-draw.text((0, 0), text, (255, 255, 255), font=font)
-img.save(out_file)
+def imagedraw(name_of_certificate_holder):
+    fnt = ImageFont.truetype("Raleway-Regular.ttf", 32)
+    img = Image.open('cert.jpg')                                   
+    d_template = ImageDraw.Draw(img)
+    text1 = str(name_of_certificate_holder)
+    event_name = "RoboQuiz 2.0"
+    if len(name_of_certificate_holder.split(" ")) == 1:
+        d_template.text((460, 410), text1, font=fnt, fill="black")
+    elif len(name_of_certificate_holder.split(" ")) == 2:
+        d_template.text((420, 410), text1, font=fnt, fill="black")
+    else:
+        d_template.text((370, 410), text1, font=fnt, fill="black")
+    d_template.text((400, 270), event_name, font=fnt, fill="black")
+    return img.convert('RGB')
