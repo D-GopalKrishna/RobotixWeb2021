@@ -18,9 +18,10 @@ from io import BytesIO
 import requests
 import tempfile
 from django.core import files
+import PIL
+from PIL import Image, ImageDraw
 
 # Create your models here.
-
 class Certificate(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
@@ -53,5 +54,10 @@ def img_handler(created,instance,*args,**kwargs):
 
                 # Write image block to temporary file
                 lf.write(block)
-            instance.image.save(file_name, files.File(lf))
+            my_img = Image.open(lf)
+            d1 = ImageDraw.Draw(my_img)
+            d1.text((28, 36), "Hello, TutorialsPoint!", fill=(255, 0, 0))
+            new_img_temp_file = tempfile.NamedTemporaryFile(suffix = '.jpeg')
+            my_img.save(new_img_temp_file)
+            instance.image.save(file_name, files.File(new_img_temp_file))
             instance.save()
