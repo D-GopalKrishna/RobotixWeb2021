@@ -6,16 +6,12 @@ from django.db.models.signals import post_save
 import urllib.request
 from django.core.files import File
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from io import StringIO
+import io
 import os
 
 from .utill import imagedraw
+from events.models import Event
 # Create your models here.
-class Event(models.Model):
-    content = models.TextField()
-    date_event = models.DateField()
-    date_result = models.DateField()
-    sign = models.ImageField(upload_to='signature/')
 
 class Certificate(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
@@ -27,10 +23,10 @@ class Certificate(models.Model):
 def img_handler(created,instance,*args,**kwargs):
     if created:
         reopen = imagedraw(instance.name)
-        tempfile_io = StringIO()
+        tempfile_io = io.BytesIO()
         reopen.save(tempfile_io,format='JPEG')
-        length=tempfile_io.seek(0, os.SEEK_END)
-        image_file = InMemoryUploadedFile(tempfile_io, None, '{instance.name}.jpg','image/jpeg',str(length), None)
+        #length=tempfile_io.seek(0, os.SEEK_END)
+        instance.image = InMemoryUploadedFile(tempfile_io, None, '{instance.name}.jpg','image/jpeg',tempfile_io.tell, None)
         #img_file = File(reopen)
-        instance.image.save("{instance.name}.jpeg", image_file)
+        #.save("{instance.name}.jpeg", image_file)
         instance.save()

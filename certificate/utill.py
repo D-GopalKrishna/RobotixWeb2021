@@ -3,8 +3,8 @@ import pandas as pd
 import os
 
 def imagedraw(name_of_certificate_holder):
-    fnt = ImageFont.truetype("Raleway-Regular.ttf", 32)
-    img = Image.open('cert.jpg')                                   
+    fnt = ImageFont.truetype("http://127.0.0.1:8000/static/font/Raleway-Regular.ttf", 32)
+    img = Image.open('http://127.0.0.1:8000/static/img/cert.jpg')                                   
     d_template = ImageDraw.Draw(img)
     text1 = str(name_of_certificate_holder)
     event_name = "RoboQuiz 2.0"
